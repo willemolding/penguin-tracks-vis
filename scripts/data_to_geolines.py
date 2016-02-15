@@ -11,7 +11,7 @@ for name, group in df.groupby('penguin_id'):
 
 	points = []
 	for index, row in group.iterrows():
-		points.append( (row['Latitude'], row['Longitude']) )
+		points.append( ( row['Longitude'], row['Latitude']) )
 
 	line = geojson.LineString(points)
 	feature_list.append( geojson.Feature(geometry=line, properties={'penguin_id' : name}) )
