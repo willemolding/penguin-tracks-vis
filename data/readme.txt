@@ -1,0 +1,1 @@
+This directory contains the data for the tracks taken from GPS modules attached to little penguins
