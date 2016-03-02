@@ -1,15 +1,11 @@
 var po = org.polymaps;
 
 var map = po.map()
-    .container(document.getElementById("map").appendChild(po.svg("svg")))
-    .center({lat: -43.287965, lon: 147.575580})
-    .zoom(11)
-    .zoomRange([8, 15])
-    .add(po.interact());
-
-
-  /* Display compass control. */
-  map.add(po.compass());
+.container(document.getElementById("map").appendChild(po.svg("svg")))
+.center({lat: -43.287965, lon: 147.575580})
+.zoom(11)
+.zoomRange([8, 15])
+.add(po.interact());
 
 
 var script = document.createElement("script");
@@ -31,19 +27,19 @@ function callback(data) {
       var resource = resources[j];
       map.add(po.image()
           .url(template(resource.imageUrl, resource.imageUrlSubdomains)))
-          .tileSize({x: resource.imageWidth, y: resource.imageHeight});
-    }
+      .tileSize({x: resource.imageWidth, y: resource.imageHeight});
   }
+}
 
 map.add(po.geoJson()
     .url("tracks.json")
     .id("tracks")
     .zoom(12)
     .tile(false)
-  .on("load", po.stylist()
-    .attr("stroke", 'red' )
-    .attr("fill", 'none')
-    .title(function(d) { return d.properties.STREET + ": " + d.properties.PCI + " PCI"; })));
+    .on("load", po.stylist()
+        .attr("stroke", 'red' )
+        .attr("fill", 'none')
+        .title(function(d) { return d.properties.STREET + ": " + d.properties.PCI + " PCI"; })));
 
 }
 
@@ -52,20 +48,24 @@ function template(url, subdomains) {
   var n = subdomains.length,
       salt = ~~(Math.random() * n); // per-session salt
 
-  /** Returns the given coordinate formatted as a 'quadkey'. */
-  function quad(column, row, zoom) {
-    var key = "";
-    for (var i = 1; i <= zoom; i++) {
-      key += (((row >> zoom - i) & 1) << 1) | ((column >> zoom - i) & 1);
-    }
-    return key;
+      /** Returns the given coordinate formatted as a 'quadkey'. */
+      function quad(column, row, zoom) {
+        var key = "";
+        for (var i = 1; i <= zoom; i++) {
+          key += (((row >> zoom - i) & 1) << 1) | ((column >> zoom - i) & 1);
+      }
+      return key;
   }
 
   return function(c) {
     var quadKey = quad(c.column, c.row, c.zoom),
-        server = Math.abs(salt + c.column + c.row + c.zoom) % n;
+    server = Math.abs(salt + c.column + c.row + c.zoom) % n;
     return url
-        .replace("{quadkey}", quadKey)
-        .replace("{subdomain}", subdomains[server]);
-  };
+    .replace("{quadkey}", quadKey)
+    .replace("{subdomain}", subdomains[server]);
+};
 }
+
+
+/* Display compass control. */
+map.add(po.compass());
