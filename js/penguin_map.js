@@ -8,6 +8,10 @@ var map = po.map()
 .add(po.interact());
 
 
+/* Display compass control. */
+map.add(po.compass());
+
+
 var script = document.createElement("script");
 script.setAttribute("type", "text/javascript");
 script.setAttribute("src", "http://dev.virtualearth.net"
